@@ -1,0 +1,8 @@
+__pycache__/
+.DS_Store
+
+# Trail-cam footage and other raw video - data, not code
+*.mp4
+
+# Generated per-folder output, regenerable by running the pipeline
+clip_timestamps.json
