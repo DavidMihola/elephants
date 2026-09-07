@@ -24,6 +24,13 @@ def get_video_fps(video_path):
         return None
 
 
+def blank_template_filename(total_seconds):
+    """Maps a chosen blank duration (in seconds) to its template clip's filename,
+    e.g. 10 -> '0m10s_Template.MP4', 70 -> '1m10s_Template.MP4'."""
+    minutes, seconds = divmod(int(total_seconds), 60)
+    return f"{minutes}m{seconds:02d}s_Template.MP4"
+
+
 def seconds_to_timecode(seconds, fps=25):
     """Converts a float number of seconds into CMX 3600 timecode (HH:MM:SS:FF).
     fps may be fractional (e.g. NTSC 29.97) - frames-per-second is rounded to an
@@ -96,7 +103,7 @@ def generate_edl_from_clip_analysis(json_path, output_edl_path, fps=None):
             if gap_sec > 0:
                 record_frames = _add_event(
                     edl_lines, event_index, record_frames, gap_sec,
-                    f"placeholder_{gap_sec}s.mp4", fps
+                    blank_template_filename(gap_sec), fps
                 )
                 event_index += 1
 
