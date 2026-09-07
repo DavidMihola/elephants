@@ -1,5 +1,5 @@
+import argparse
 import json
-import sys
 from pathlib import Path
 
 
@@ -790,30 +790,24 @@ def print_report(clips, decisions):
 
 if __name__ == "__main__":
 
-    # Run:
-    #
-    #     python3 blank_calculator.py
-    #
-    # Uses:
-    #
-    #     test.json
-    #
-    # Or:
-    #
-    #     python3 blank_calculator.py my_sequence.json
-    #
-
-    if len(sys.argv) > 1:
-
-        json_file = Path(
-            sys.argv[1]
+    parser = argparse.ArgumentParser(
+        description=(
+            "Analyze a folder's clip_timestamps.json and report each clip's "
+            "estimated real-world position plus the chosen blank duration "
+            "for every transition between clips."
         )
+    )
 
-    else:
+    parser.add_argument(
+        "json_file",
+        help="Path to a clip_timestamps.json"
+    )
 
-        json_file = Path(
-            "test.json"
-        )
+    args = parser.parse_args()
+
+    json_file = Path(
+        args.json_file
+    )
 
     if not json_file.exists():
 
@@ -821,7 +815,7 @@ if __name__ == "__main__":
             f"ERROR: Could not find {json_file}"
         )
 
-        sys.exit(1)
+        raise SystemExit(1)
 
     clips, decisions = (
         process_timestamp_json(

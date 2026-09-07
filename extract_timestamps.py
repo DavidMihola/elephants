@@ -1,3 +1,4 @@
+import argparse
 import re
 import subprocess
 import numpy as np
@@ -176,7 +177,17 @@ def process_video_directory(root_dir, crop_box):
 # Example usage coordinates (adjust based on where your camera puts the timestamp)
 # e.g., Top-left banner: y from 20 to 80, x from 30 to 300
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Walk a directory tree of trail-cam clips and write a "
+                     "clip_timestamps.json (on-screen HH:MM read via template "
+                     "matching) into every folder that contains .mp4 files."
+    )
+    parser.add_argument(
+        "root_dir",
+        help="Root folder to scan for camera clip folders"
+    )
+    args = parser.parse_args()
+
     box = (1035, 1080, 1245, 1390)
-    # detected_timeframes = find_times("./250216/Sequence1_00.20/Camera_B1/IMG_0066.MP4", box)
-    detected_timeframes = process_video_directory("./250216", box)
+    detected_timeframes = process_video_directory(args.root_dir, box)
     print(f"Detected Timestamp: {detected_timeframes}")

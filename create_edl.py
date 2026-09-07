@@ -1,6 +1,6 @@
+import argparse
 import os
 import subprocess
-import sys
 
 import blank_calculator
 
@@ -127,5 +127,15 @@ def generate_edls_for_directory(root_dir, fps=None):
 
 
 if __name__ == "__main__":
-    root = sys.argv[1] if len(sys.argv) > 1 else "./250216"
-    generate_edls_for_directory(root)
+    parser = argparse.ArgumentParser(
+        description="Walk a directory tree and write a timeline.edl (CMX 3600) "
+                     "into every folder containing a clip_timestamps.json, using "
+                     "blank_calculator's chosen blank duration between clips."
+    )
+    parser.add_argument(
+        "root_dir",
+        help="Root folder to scan for camera clip folders"
+    )
+    args = parser.parse_args()
+
+    generate_edls_for_directory(args.root_dir)
