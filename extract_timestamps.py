@@ -2,38 +2,11 @@ import re
 import subprocess
 import numpy as np
 import cv2
-import pytesseract
-from PIL import Image
 
 import char_ocr
 
 # Matches a clean HH:MM (or H:MM) OCR read, e.g. "12:35"
 TIMESTAMP_RE = re.compile(r'^\d{1,2}:\d{2}$')
-
-def extract_timestamp_from_frame(image_path, crop_box):
-    """
-    Crops a specific region of interest (ROI) from an image and runs OCR 
-    configured strictly for digital timestamps.
-    crop_box format: (ymin, ymax, xmin, xmax)
-    """
-    img = cv2.imread(image_path)
-    
-    # 1. Crop using NumPy array slicing [ymin:ymax, xmin:xmax]
-    ymin, ymax, xmin, xmax = crop_box
-    cropped_roi = img[ymin:ymax, xmin:xmax]
-    
-    # Optional preprocessing for better OCR accuracy:
-    # Convert to grayscale and scale up to help Tesseract read digital fonts cleanly
-    gray = cv2.cvtColor(cropped_roi, cv2.COLOR_BGR2GRAY)
-    scaled = cv2.resize(gray, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    
-    # 2. Run Tesseract OCR optimized for a single line of numbers/symbols
-    # --psm 7 treats the image as a single text line
-    # whitelist restricts characters to digits, colons, spaces, and hyphens
-    custom_config = r'--psm 7 --user-patterns time.pattern -c tessedit_char_whitelist=0123456789:- '
-    timestamp_text = pytesseract.image_to_string(scaled, config=custom_config)
-    
-    return timestamp_text.strip()
 
 def extract_timestamp_at_second(video_path, timestamp, crop_box, keyframe_only=False):
     print(f"extract_timestamp_at_second: {timestamp} - {crop_box}" + (" [keyframe fallback]" if keyframe_only else ""))
@@ -162,7 +135,6 @@ def find_times(video_path, crop_box):
     ]
 
 import os
-import glob
 import json
 
 def process_video_directory(root_dir, crop_box):
