@@ -6,3 +6,4 @@ __pycache__/
 
 # Generated per-folder output, regenerable by running the pipeline
 clip_timestamps.json
+timeline.edl

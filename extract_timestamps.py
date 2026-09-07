@@ -206,5 +206,5 @@ def process_video_directory(root_dir, crop_box):
 if __name__ == "__main__":
     box = (1035, 1080, 1245, 1390)
     # detected_timeframes = find_times("./250216/Sequence1_00.20/Camera_B1/IMG_0066.MP4", box)
-    detected_timeframes = process_video_directory("./", box)
+    detected_timeframes = process_video_directory("./250216", box)
     print(f"Detected Timestamp: {detected_timeframes}")
